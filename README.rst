@@ -91,6 +91,7 @@ TODO
 
 Ideas:
 
+* maybe include only record definition instead of -include_lib einfo.hrl?
 * remove macros and only use parse transform?
 * einfo:throw_error/1,2,3
 * einfo:throw_wrap/2,3,4
