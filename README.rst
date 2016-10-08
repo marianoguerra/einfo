@@ -66,7 +66,12 @@ to:
 				module = module1, function = f3, arity = 2, line = 13}};
 	f3(A, B) -> A / B.
 
+TODO
+----
 
+* include -include_lib einfo attribute if not there
+* fix ?FUNCTION_* macro detection
+* add eino:throw_error  function?
 
 Author
 ------
