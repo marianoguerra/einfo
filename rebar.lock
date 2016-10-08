@@ -1,1 +1,4 @@
-[].
+[{<<"ast_walk">>,
+  {git,"git://github.com/marianoguerra/ast_walk",
+       {ref,"56301bbf4dc7a804500e148268b30172ad6f3029"}},
+  0}].

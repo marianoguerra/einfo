@@ -4,17 +4,15 @@
 -record(state, {module, function, function_line=-1, function_arity=-1}).
 
 parse_transform(Forms0, _Options) ->
-    io:format("forms before: ~p~n", [Forms0]),
     State = #state{},
     {Forms, _NewState} = ast_walk:forms(Forms0, fun walker/2, State),
-    io:format("forms after: ~p~n", [Forms]),
     Forms.
 
 format_error(Error) -> atom_to_list(Error).
 
 %% private
 
-walker(State, Ast={function, Line, Name, Arity, _Clauses}) ->
+walker(State, Ast={pre, {function, Line, Name, Arity, _Clauses}}) ->
     {Ast, State#state{function=Name, function_line=Line, function_arity=Arity}};
 
 walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, error}},
