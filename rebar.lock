@@ -1,4 +1,4 @@
 [{<<"ast_walk">>,
   {git,"git://github.com/marianoguerra/ast_walk",
-       {ref,"56301bbf4dc7a804500e148268b30172ad6f3029"}},
+       {ref,"3e76c448f6f9d48b7eb9ab2e750ee96a2cc374b3"}},
   0}].

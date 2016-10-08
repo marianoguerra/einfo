@@ -1,7 +1,8 @@
 -module(einfo_pt).
 -export([parse_transform/2, format_error/1]).
 
--record(state, {module, function= <<>>, function_line=-1, function_arity=-1}).
+-record(state, {module, function=undefined, function_line=-1, function_arity=-1,
+				first_function=true, has_include_einfo=false}).
 
 parse_transform(Forms0, _Options) ->
     State = #state{},
@@ -12,9 +13,15 @@ format_error(Error) -> atom_to_list(Error).
 
 %% private
 
-walker(State=#state{function= <<>>},
+walker(State, Ast={attribute, _Line, include_lib, IncludePath}) ->
+    case string:str(IncludePath, "/einfo.hrl") of
+        0 -> {Ast, State};
+        _ -> {Ast, State#state{has_include_einfo=true}}
+    end;
+walker(State=#state{first_function=true, has_include_einfo=false},
        Ast={function, Line, _Name, _Arity, _Clauses}) ->
-    {[{attribute, Line, include_lib, ["einfo/include/einfo.hrl"]}, Ast], State};
+    {[{attribute, Line, include_lib, "einfo/include/einfo.hrl"}, Ast],
+	 State#state{first_function=false}};
 
 walker(State, {pre, Ast={function, Line, Name, Arity, _Clauses}}) ->
     {Ast, State#state{function=Name, function_line=Line, function_arity=Arity}};

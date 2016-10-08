@@ -49,6 +49,8 @@ to:
 
 	-export([f1/0, f2/1, f3/2, f_extra/1]).
 
+    -include_lib("einfo/include/einfo.hrl").
+
 	f1() ->
 		A = {error,
 			 #einfo{type = my_bad, reason = "my_bad",
@@ -80,10 +82,11 @@ to:
 				module = module1, function = f_extra, arity = 1,
 				line = 17, extra = #{arg => A, bad => true}}}.
 
+Note that include_lib for einfo.hrl will only be included if it wasn't there
+
 TODO
 ----
 
-* include -include_lib einfo attribute if not there
 * fix ?FUNCTION_* macro detection
 
 Ideas:
@@ -91,7 +94,6 @@ Ideas:
 * remove macros and only use parse transform?
 * einfo:throw_error/1,2,3
 * einfo:throw_wrap/2,3,4
-* einfo:error(Type, Reason, Extra) % extra is a proplist or map
 * einfo:error_format(Type, Fmt, Args) % Reason is io_lib:format(Fmt, Args)
 * einfo:wrap(Type, Cause), wrap(Type, Reason, Cause), wrap(Type, Reason, Cause, Extra)
 * einfo:to_string(EInfo)
