@@ -26,16 +26,33 @@ walker(State=#state{first_function=true, has_include_einfo=false},
 walker(State, {pre, Ast={function, Line, Name, Arity, _Clauses}}) ->
     {Ast, State#state{function=Name, function_line=Line, function_arity=Arity}};
 
+% einfo:error(Type)
 walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, error}},
                [{atom,_,Type}]}) ->
-    {error_record(State, Line, Type, {string, Line, atom_to_list(Type)},
-                  ast_undefined(Line)), State};
+    {error_record(State, Line, Type),
+     State};
+% einfo:error(Type, Reason)
 walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, error}},
                [{atom,_,Type}, Reason]}) ->
-    {error_record(State, Line, Type, Reason, ast_undefined(Line)), State};
+    {error_record(State, Line, Type, Reason), State};
+% einfo:error(Type, Reason, Extra)
 walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, error}},
                [{atom,_,Type}, Reason, Extra]}) ->
     {error_record(State, Line, Type, Reason, Extra), State};
+
+% einfo:wrap(Type, Cause)
+walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, wrap}},
+               [{atom,_,Type}, Cause]}) ->
+    {wrap_error_record(State, Line, Type, Cause), State};
+% einfo:wrap(Type, Reason, Cause)
+walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, wrap}},
+               [{atom,_,Type}, Reason, Cause]}) ->
+    {wrap_error_record(State, Line, Type, Reason, Cause), State};
+
+% einfo:wrap(Type, Reason, Extra, Cause)
+walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, wrap}},
+               [{atom,_,Type}, Reason, Extra, Cause]}) ->
+    {error_record(State, Line, Type, Reason, Extra, Cause), State};
 
 walker(State, Ast={attribute, _Line, module, Module}) ->
     {Ast, State#state{module=Module}};
@@ -43,8 +60,24 @@ walker(State, Other) -> {Other, State}.
 
 ast_undefined(Line) -> {atom, Line, nil}.
 
+wrap_error_record(State, Line, Type, Cause) ->
+    wrap_error_record(State, Line, Type, {string, Line, atom_to_list(Type)},
+                                          Cause).
+
+wrap_error_record(State, Line, Type, Reason, Cause) ->
+    error_record(State, Line, Type, Reason, ast_undefined(Line), Cause).
+
+error_record(State, Line, Type) ->
+    error_record(State, Line, Type, {string, Line, atom_to_list(Type)}).
+
+error_record(State, Line, Type, Reason) ->
+    error_record(State, Line, Type, Reason, ast_undefined(Line)).
+
+error_record(State, Line, Type, Reason, Extra) ->
+    error_record(State, Line, Type, Reason, Extra, ast_undefined(Line)).
+
 error_record(#state{module=Module, function=Function, function_arity=Arity},
-             Line, Type, Reason, Extra) ->
+             Line, Type, Reason, Extra, Cause) ->
     {tuple, Line,
      [{atom, Line, error},
       {record, Line, einfo,
@@ -54,4 +87,5 @@ error_record(#state{module=Module, function=Function, function_arity=Arity},
         {record_field, Line, {atom, Line, function}, {atom, Line, Function}},
         {record_field, Line, {atom, Line, arity}, {integer, Line, Arity}},
         {record_field, Line, {atom, Line, line}, {integer, Line, Line}},
+        {record_field, Line, {atom, Line, cause}, Cause},
         {record_field, Line, {atom, Line, extra}, Extra}]}]}.
