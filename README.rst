@@ -71,7 +71,17 @@ TODO
 
 * include -include_lib einfo attribute if not there
 * fix ?FUNCTION_* macro detection
-* add eino:throw_error  function?
+
+Ideas:
+
+* remove macros and only use parse transform?
+* einfo:throw_error/1,2,3
+* einfo:throw_wrap/2,3,4
+* einfo:error(Type, Reason, Extra) % extra is a proplist or map
+* einfo:error_format(Type, Fmt, Args) % Reason is io_lib:format(Fmt, Args)
+* einfo:wrap(Type, Cause), wrap(Type, Reason, Cause), wrap(Type, Reason, Cause, Extra)
+* einfo:to_string(EInfo)
+* einfo:print(EInfo)
 
 Author
 ------
