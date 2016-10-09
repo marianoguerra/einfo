@@ -1,6 +1,8 @@
 -module(module_with_include_lib).
 -export([f1/0, f2/1, f3/2, f_extra/1, wrap/0, wrap/1, wrap_reason/0,
-        wrap_extra/0, format/1, format_extra/1]).
+        wrap_extra/0,
+		format/1, format_extra/1,
+		wrap_format/1, wrap_format_extra/1]).
 
 -include_lib("einfo/include/einfo.hrl").
 
@@ -37,3 +39,10 @@ format(X) ->
 
 format_extra(A) ->
     einfo:format(badarg, "bad argument: ~p", [A], #{arg => A, bad => true}).
+
+wrap_format(X) ->
+	einfo:wrap_format(badarg, "bad argument: ~p", [X], {error, parent}).
+
+wrap_format_extra(A) ->
+    einfo:wrap_format(badarg, "bad argument: ~p", [A], #{arg => A, bad => true},
+	 {error, parent}).

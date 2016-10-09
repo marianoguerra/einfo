@@ -58,11 +58,22 @@ walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, format}},
                [{atom,_,Type}, Format, FormatData]}) ->
 	FormatCall = io_lib_format_ast(Line, Format, FormatData),
     {error_record(State, Line, Type, FormatCall), State};
-% einfo:error(Type, Format, FormatData, Extra)
+% einfo:format(Type, Format, FormatData, Extra)
 walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, format}},
                [{atom,_,Type}, Format, FormatData, Extra]}) ->
 	FormatCall = io_lib_format_ast(Line, Format, FormatData),
     {error_record(State, Line, Type, FormatCall, Extra), State};
+
+% einfo:wrap_format(Type, Format, FormatData, Cause)
+walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, wrap_format}},
+               [{atom,_,Type}, Format, FormatData, Cause]}) ->
+	FormatCall = io_lib_format_ast(Line, Format, FormatData),
+    {wrap_error_record(State, Line, Type, FormatCall, Cause), State};
+% einfo:wrap_format(Type, Format, FormatData, Extra, Cause)
+walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, wrap_format}},
+               [{atom,_,Type}, Format, FormatData, Extra, Cause]}) ->
+	FormatCall = io_lib_format_ast(Line, Format, FormatData),
+    {error_record(State, Line, Type, FormatCall, Extra, Cause), State};
 
 walker(State, Ast={attribute, _Line, module, Module}) ->
     {Ast, State#state{module=Module}};
