@@ -134,9 +134,6 @@ Ideas:
 
 * maybe include only record definition instead of -include_lib einfo.hrl?
 * remove macros and only use parse transform?
-* einfo:throw_error/1,2,3
-* einfo:throw_wrap/2,3,4
-* einfo:error_format(Type, Fmt, Args) % Reason is io_lib:format(Fmt, Args)
 * einfo:to_string(EInfo)
 * einfo:print(EInfo)
 

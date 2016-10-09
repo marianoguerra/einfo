@@ -48,17 +48,32 @@ walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, wrap}},
 walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, wrap}},
                [{atom,_,Type}, Reason, Cause]}) ->
     {wrap_error_record(State, Line, Type, Reason, Cause), State};
-
 % einfo:wrap(Type, Reason, Extra, Cause)
 walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, wrap}},
                [{atom,_,Type}, Reason, Extra, Cause]}) ->
     {error_record(State, Line, Type, Reason, Extra, Cause), State};
+
+% einfo:format(Type, Format, FormatData)
+walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, format}},
+               [{atom,_,Type}, Format, FormatData]}) ->
+	FormatCall = io_lib_format_ast(Line, Format, FormatData),
+    {error_record(State, Line, Type, FormatCall), State};
+% einfo:error(Type, Format, FormatData, Extra)
+walker(State, {call, Line, {remote, _, {atom, _, einfo}, {atom, _, format}},
+               [{atom,_,Type}, Format, FormatData, Extra]}) ->
+	FormatCall = io_lib_format_ast(Line, Format, FormatData),
+    {error_record(State, Line, Type, FormatCall, Extra), State};
 
 walker(State, Ast={attribute, _Line, module, Module}) ->
     {Ast, State#state{module=Module}};
 walker(State, Other) -> {Other, State}.
 
 ast_undefined(Line) -> {atom, Line, nil}.
+
+io_lib_format_ast(Line,  FormatAst,  FormatDataAst) ->
+	{call, Line,
+	 {remote, Line, {atom, Line, io_lib}, {atom, Line, format}},
+	 [FormatAst, FormatDataAst]}.
 
 wrap_error_record(State, Line, Type, Cause) ->
     wrap_error_record(State, Line, Type, {string, Line, atom_to_list(Type)},

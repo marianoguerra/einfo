@@ -1,6 +1,6 @@
 -module(module1).
 -export([f1/0, f2/1, f3/2, f_extra/1, wrap/0, wrap/1, wrap_reason/0,
-        wrap_extra/0]).
+        wrap_extra/0, format/1, format_extra/1]).
 
 f1 () ->
     A = einfo:error(my_bad),
@@ -29,3 +29,9 @@ wrap_reason() ->
 
 wrap_extra() ->
     einfo:wrap(badarg, "Reason", #{with_parent => true}, {error, parent_cause}).
+
+format(X) ->
+	einfo:format(badarg, "bad argument: ~p", [X]).
+
+format_extra(A) ->
+    einfo:format(badarg, "bad argument: ~p", [A], #{arg => A, bad => true}).
