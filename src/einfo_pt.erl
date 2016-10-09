@@ -79,7 +79,7 @@ walker(State, Ast={attribute, _Line, module, Module}) ->
     {Ast, State#state{module=Module}};
 walker(State, Other) -> {Other, State}.
 
-ast_undefined(Line) -> {atom, Line, nil}.
+ast_undefined(Line) -> {atom, Line, undefined}.
 
 io_lib_format_ast(Line,  FormatAst,  FormatDataAst) ->
 	{call, Line,
