@@ -5,6 +5,10 @@
          extra/1, extra/2, extra/3]).
 -export([function_name_supported/0, function_arity_supported/0]).
 -export([to_string/1, print/1]).
+-ifdef(supports_maps).
+-export([to_map/1]).
+-endif.
+-export([to_plist/1]).
 
 -include("einfo.hrl").
 
@@ -47,6 +51,18 @@ to_string(EInfo) ->
 
 print(EInfo) ->
     io:format(?FORMAT "~n", to_string_args(EInfo)).
+
+to_plist(#einfo{type=Type, msg=Msg, module=Module, function=Fun, arity=Arity,
+                line=Line, extra=Extra, cause=Cause}) ->
+    [{type, Type}, {msg, Msg}, {module, Module}, {function, Fun}, 
+     {arity, Arity}, {line, Line}, {extra, Extra}, {cause, Cause}].
+
+-ifdef(supports_maps).
+to_map(#einfo{type=Type, msg=Msg, module=Module, function=Fun, arity=Arity,
+                line=Line, extra=Extra, cause=Cause}) ->
+    #{type => Type, msg => Msg, module => Module, function => Fun,
+      arity => Arity, line => Line, extra => Extra, cause => Cause}.
+-endif.
 
 %%====================================================================
 %% Internal functions

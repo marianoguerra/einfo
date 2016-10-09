@@ -297,16 +297,37 @@ extra(EInfo, Key, Default)
     Lookup Key in the extra field, works if Extra is a Map or PropList, returns
     Default if not found
 
+to_plist(EInfo)
+    Returns the EInfo record as a proplist
+
+to_map(EInfo)
+    Returns the EInfo record as a map, supported on Erlang >= 17
+
+Macros
+......
+
+NEW_ERROR(Type)
+	Like einfo:error/1 but as a macro
+NEW_ERROR(Type, Msg)
+	Like einfo:error/2 but as a macro
+NEW_ERROR(Type, Msg, Extra)
+	Like einfo:error/3 but as a macro
+
+WRAP_ERROR(Type, Cause)
+	Like einfo:wrap/2 but as a macro
+WRAP_ERROR(Type, Msg, Cause)
+	Like einfo:wrap/3 but as a macro
+WRAP_ERROR(Type, Msg, Extra, Cause)
+	Like einfo:wrap/4 but as a macro
+
 TODO
 ----
 
-* fix ?FUNCTION_* macro detection
 * automatic include_lib doesn't seem to be working
 
 Ideas:
 
 * maybe include only record definition instead of -include_lib einfo.hrl?
-* remove macros and only use parse transform?
 
 Author
 ------
