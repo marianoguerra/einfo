@@ -1,7 +1,8 @@
 -module(einfo).
 
 %% API exports
--export([type/1, msg/1, module/1, line/1, function/1, arity/1]).
+-export([type/1, msg/1, module/1, line/1, function/1, arity/1, cause/1,
+         extra/1, extra/2, extra/3]).
 -export([function_name_supported/0, function_arity_supported/0]).
 -export([to_string/1, print/1]).
 
@@ -19,6 +20,24 @@ module(#einfo{module=Val}) -> Val.
 line(#einfo{line=Val}) -> Val.
 function(#einfo{function=Val}) -> Val.
 arity(#einfo{arity=Val}) -> Val.
+cause(#einfo{cause=Val}) -> Val.
+extra(#einfo{extra=Val}) -> Val.
+
+extra(EInfo, Key) -> extra(EInfo, Key, undefined).
+
+-ifdef(supports_maps).
+extra(#einfo{extra=Extra}, Key, Default) when is_map(Extra) ->
+    maps:get(Key, Extra, Default);
+extra(#einfo{extra=Extra}, Key, Default) when is_list(Extra) ->
+    proplists:get_value(Key, Extra, Default);
+extra(#einfo{}, _Key, Default) ->
+    Default.
+-else.
+extra(#einfo{extra=Extra}, Key, Default) when is_list(Extra) ->
+    proplists:get_value(Key, Extra, Default);
+extra(#einfo{}, _Key, Default) ->
+    Default.
+-endif.
 
 function_name_supported() -> ?FUNCTION_NAME_SUPPORTED.
 function_arity_supported() -> ?FUNCTION_ARITY_SUPPORTED.

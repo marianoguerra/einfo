@@ -20,7 +20,7 @@ f3(A, B) -> A / B.
 
 f_extra(A) ->
     einfo:error(badarg, io_lib:format("bad argument: ~p", [A]),
-                #{arg => A, bad => true}).
+                [{arg, A}, {bad, true}]).
 
 wrap() ->
     einfo:wrap(badarg, {error, parent_cause}).
@@ -32,17 +32,17 @@ wrap_msg() ->
     einfo:wrap(badarg, "Msg", {error, parent_cause}).
 
 wrap_extra() ->
-    einfo:wrap(badarg, "Msg", #{with_parent => true}, {error, parent_cause}).
+    einfo:wrap(badarg, "Msg", [{with_parent, true}], {error, parent_cause}).
 
 format(X) ->
 	einfo:format(badarg, "bad argument: ~p", [X]).
 
 format_extra(A) ->
-    einfo:format(badarg, "bad argument: ~p", [A], #{arg => A, bad => true}).
+    einfo:format(badarg, "bad argument: ~p", [A], [{arg, A}, {bad, true}]).
 
 wrap_format(X) ->
 	einfo:wrap_format(badarg, "bad argument: ~p", [X], {error, parent}).
 
 wrap_format_extra(A) ->
-    einfo:wrap_format(badarg, "bad argument: ~p", [A], #{arg => A, bad => true},
+    einfo:wrap_format(badarg, "bad argument: ~p", [A], [{arg, A}, {bad, true}],
 	 {error, parent}).

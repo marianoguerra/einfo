@@ -274,6 +274,29 @@ einfo:to_string(EInfo | {error, EInfo})
 einfo:print(EInfo | {error, EInfo})
 	print string representation with io:format
 
+type(EInfo)
+    Return the value of the type field
+msg(EInfo)
+    Return the value of the msg field
+module(EInfo)
+    Return the value of the module field
+line(EInfo)
+    Return the value of the line field
+function(EInfo)
+    Return the value of the function field
+arity(EInfo)
+    Return the value of the arity field
+cause(EInfo)
+    Return the value of the cause field
+extra(EInfo)
+    Return the value of the extra field
+extra(EInfo, Key)
+    Lookup Key in the extra field, works if Extra is a Map or PropList, returns
+    undefined if not found
+extra(EInfo, Key, Default)
+    Lookup Key in the extra field, works if Extra is a Map or PropList, returns
+    Default if not found
+
 TODO
 ----
 
@@ -284,7 +307,6 @@ Ideas:
 
 * maybe include only record definition instead of -include_lib einfo.hrl?
 * remove macros and only use parse transform?
-* add getter for extra parameter, make it work for proplists and maps
 
 Author
 ------
