@@ -4,7 +4,7 @@
           %% {error, <type>}
           type,
           %% a human readable explanation of the error
-          reason,
+          msg,
           %% the module where this error was generated, can be filled using
           %% macros or parse transforms
           module,
@@ -40,20 +40,20 @@
 -endif.
 
 -define(NEW_ERROR(Type),
-        {error, #einfo{type=Type, reason=atom_to_list(Type),
+        {error, #einfo{type=Type, msg=atom_to_list(Type),
                        module=?MODULE, line=?LINE}}).
--define(NEW_ERROR(Type, Reason),
-        {error, #einfo{type=Type, reason=Reason, module=?MODULE, line=?LINE}}).
--define(NEW_ERROR(Type, Reason, Extra),
-        {error, #einfo{type=Type, reason=Reason, module=?MODULE, line=?LINE,
+-define(NEW_ERROR(Type, Msg),
+        {error, #einfo{type=Type, msg=Msg, module=?MODULE, line=?LINE}}).
+-define(NEW_ERROR(Type, Msg, Extra),
+        {error, #einfo{type=Type, msg=Msg, module=?MODULE, line=?LINE,
                        extra=Extra}}).
 
 -define(WRAP_ERROR(Type, Cause),
-        {error, #einfo{type=Type, reason=atom_to_list(Type),
+        {error, #einfo{type=Type, msg=atom_to_list(Type),
                        cause=Cause, module=?MODULE, line=?LINE}}).
--define(WRAP_ERROR(Type, Reason, Cause),
-        {error, #einfo{type=Type, reason=Reason,
+-define(WRAP_ERROR(Type, Msg, Cause),
+        {error, #einfo{type=Type, msg=Msg,
                        cause=Cause, module=?MODULE, line=?LINE}}).
--define(WRAP_ERROR(Type, Reason, Cause, Extra),
-        {error, #einfo{type=Type, reason=Reason, extra=Extra,
+-define(WRAP_ERROR(Type, Msg, Cause, Extra),
+        {error, #einfo{type=Type, msg=Msg, extra=Extra,
                        cause=Cause, module=?MODULE, line=?LINE}}).

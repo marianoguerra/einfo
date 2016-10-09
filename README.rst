@@ -70,11 +70,11 @@ it will transform the module in test/pt_samples/module1.erl from:
 	wrap(Error) ->
 		einfo:wrap(badarg, Error).
 
-	wrap_reason() ->
-		einfo:wrap(badarg, "Reason", {error, parent_cause}).
+	wrap_msg() ->
+		einfo:wrap(badarg, "Msg", {error, parent_cause}).
 
 	wrap_extra() ->
-		einfo:wrap(badarg, "Reason", #{with_parent => true}, {error, parent_cause}).
+		einfo:wrap(badarg, "Msg", #{with_parent => true}, {error, parent_cause}).
 
 	format(X) ->
 		einfo:format(badarg, "bad argument: ~p", [X]).
@@ -99,7 +99,7 @@ to:
 
 	f1() ->
 		A = {error,
-		 #einfo{type = my_bad, reason = "my_bad",
+		 #einfo{type = my_bad, msg = "my_bad",
 			module = module1, function = f1, arity = 0, line = 8,
 			cause = undefined, extra = undefined}},
 		f2(A).
@@ -109,14 +109,14 @@ to:
 	f2(X) ->
 		{error,
 		 #einfo{type = badarg,
-			reason = io_lib:format("bad argument: ~p", [X]),
+			msg = io_lib:format("bad argument: ~p", [X]),
 			module = module1, function = f2, arity = 1, line = 13,
 			cause = undefined, extra = undefined}}.
 
 	f3(A, 0) ->
 		{error,
 		 #einfo{type = division_by_zero,
-			reason = "dividing " ++ integer_to_list(A) ++ " by 0",
+			msg = "dividing " ++ integer_to_list(A) ++ " by 0",
 			module = module1, function = f3, arity = 2, line = 16,
 			cause = undefined, extra = undefined}};
 	f3(A, B) -> A / B.
@@ -124,32 +124,32 @@ to:
 	f_extra(A) ->
 		{error,
 		 #einfo{type = badarg,
-			reason = io_lib:format("bad argument: ~p", [A]),
+			msg = io_lib:format("bad argument: ~p", [A]),
 			module = module1, function = f_extra, arity = 1,
 			line = 20, cause = undefined,
 			extra = #{arg => A, bad => true}}}.
 
 	wrap() ->
 		{error,
-		 #einfo{type = badarg, reason = "badarg",
+		 #einfo{type = badarg, msg = "badarg",
 			module = module1, function = wrap, arity = 0, line = 24,
 			cause = {error, parent_cause}, extra = undefined}}.
 
 	wrap(Error) ->
 		{error,
-		 #einfo{type = badarg, reason = "badarg",
+		 #einfo{type = badarg, msg = "badarg",
 			module = module1, function = wrap, arity = 1, line = 27,
 			cause = Error, extra = undefined}}.
 
-	wrap_reason() ->
+	wrap_msg() ->
 		{error,
-		 #einfo{type = badarg, reason = "Reason",
-			module = module1, function = wrap_reason, arity = 0,
+		 #einfo{type = badarg, msg = "Msg",
+			module = module1, function = wrap_msg, arity = 0,
 			line = 30, cause = {error, parent_cause}, extra = undefined}}.
 
 	wrap_extra() ->
 		{error,
-		 #einfo{type = badarg, reason = "Reason",
+		 #einfo{type = badarg, msg = "Msg",
 			module = module1, function = wrap_extra, arity = 0,
 			line = 33, cause = {error, parent_cause},
 			extra = #{with_parent => true}}}.
@@ -157,14 +157,14 @@ to:
 	format(X) ->
 		{error,
 		 #einfo{type = badarg,
-			reason = io_lib:format("bad argument: ~p", [X]),
+			msg = io_lib:format("bad argument: ~p", [X]),
 			module = module1, function = format, arity = 1,
 			line = 36, cause = undefined, extra = undefined}}.
 
 	format_extra(A) ->
 		{error,
 		 #einfo{type = badarg,
-			reason = io_lib:format("bad argument: ~p", [A]),
+			msg = io_lib:format("bad argument: ~p", [A]),
 			module = module1, function = format_extra, arity = 1,
 			line = 39, cause = undefined,
 			extra = #{arg => A, bad => true}}}.
@@ -172,14 +172,14 @@ to:
 	wrap_format(X) ->
 		{error,
 		 #einfo{type = badarg,
-			reason = io_lib:format("bad argument: ~p", [X]),
+			msg = io_lib:format("bad argument: ~p", [X]),
 			module = module1, function = wrap_format, arity = 1,
 			line = 42, cause = {error, parent}, extra = undefined}}.
 
 	wrap_format_extra(A) ->
 		{error,
 		 #einfo{type = badarg,
-			reason = io_lib:format("bad argument: ~p", [A]),
+			msg = io_lib:format("bad argument: ~p", [A]),
 			module = module1, function = wrap_format_extra,
 			arity = 1, line = 45, cause = {error, parent},
 			extra = #{arg => A, bad => true}}}.
@@ -198,8 +198,8 @@ Type
 	An atom describing the type of error in a computer friendly way
 	What you would put as second element in an error tuple: {error, Type}
 
-Reason
-	A string describint the error in human a friendly way
+Msg
+	A string describing the error in human a friendly way
 
 Extra
 	Extra data that serves as context for the error, for example if the error
@@ -227,40 +227,40 @@ Parse Transforms
 All calls set module, function, arity and line
 
 einfo:error(Type)
-	Create an error with type set, reason is a string version of type
+	Create an error with type set, msg is a string version of type
 
-einfo:error(Type, Reason)
-	Create an error with type and reason set
+einfo:error(Type, Msg)
+	Create an error with type and msg set
 
-einfo:error(Type, Reason, Extra)
-	Create an error with type and reason and extra set
+einfo:error(Type, Msg, Extra)
+	Create an error with type and msg and extra set
 
 einfo:wrap(Type, Cause)
-	Create an error with type and cause set, reason is a string version of type
+	Create an error with type and cause set, msg is a string version of type
 
-einfo:wrap(Type, Reason, Cause)
-	Create an error with type, reason and cause set
+einfo:wrap(Type, Msg, Cause)
+	Create an error with type, msg and cause set
 
-einfo:wrap(Type, Reason, Extra, Cause)
-	Create an error with type, reason, extra and cause set
+einfo:wrap(Type, Msg, Extra, Cause)
+	Create an error with type, msg, extra and cause set
 
 einfo:format(Type, Format, FormatData)
-	Create an error with type set, reason is a the result of calling at runtime
+	Create an error with type set, msg is a the result of calling at runtime
 	io_lib:format(Format, FormatData)
 
 einfo:format(Type, Format, FormatData, Extra)
 	Create an error with type and extra set,
-	reason is a the result of calling at runtime
+	msg is a the result of calling at runtime
 	io_lib:format(Format, FormatData)
 
 einfo:wrap_format(Type, Format, FormatData, Cause)
 	Create an error with type and cause set,
-	reason is a the result of calling at runtime
+	msg is a the result of calling at runtime
 	io_lib:format(Format, FormatData)
 
 einfo:wrap_format(Type, Format, FormatData, Extra, Cause)
 	Create an error with type, extra and cause set,
-	reason is a the result of calling at runtime
+	msg is a the result of calling at runtime
 	io_lib:format(Format, FormatData)
 
 Functions
@@ -269,7 +269,7 @@ Functions
 einfo:to_string(EInfo | {error, EInfo})
 	Return a one line string representation of the error, without the cause
 	Something like:
-	'Error: {type}\@{module}:{function}/{arity}:{line} \"{reason}\" ({extra})'
+	'Error: {type}\@{module}:{function}/{arity}:{line} \"{msg}\" ({extra})'
 
 einfo:print(EInfo | {error, EInfo})
 	print string representation with io:format
