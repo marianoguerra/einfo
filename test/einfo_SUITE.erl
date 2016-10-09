@@ -46,7 +46,7 @@ to_string(_) ->
                    msg = "Msg",
                    module = module1, function = format, arity = 1,
                    line = 39, cause = nil,
-                   extra = extra([{extra, true}])},
+                   extra = [{extra, true}]},
     Error = {error, EInfo},
     Expect = "Error: my_error@module1:format/1:39 \"Msg\" ([{extra,true}])",
     String1 = lists:flatten(einfo:to_string(Error)),

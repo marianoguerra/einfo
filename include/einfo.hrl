@@ -1,29 +1,37 @@
 
+-type type() :: atom().
+-type msg() :: string().
+-type line() :: non_neg_integer().
+-type error() :: {error, einfo()} | {error, atom()} | undefined.
+-type extra() :: any().
+
 -record(einfo, {
           %% what would go on the second element in the error tuple
           %% {error, <type>}
-          type,
+          type :: type(),
           %% a human readable explanation of the error
-          msg,
+          msg :: msg(),
           %% the module where this error was generated, can be filled using
           %% macros or parse transforms
-          module,
+          module :: module(),
           %% the function where this error was generated, can be filled using
           %% macros or parse transforms
-          function,
+          function :: function() | undefined,
           %% the function arity where this error was generated, can be filled
           %% using macros or parse transforms
-          arity,
+          arity :: arity() | undefined,
           %% the line where this error was generated, can be filled using
           %% macros or parse transforms
-          line,
+          line :: line(),
 
           %% if you catch an error and generate another one, you can place
           %% the cause of this error in the cause field
-          cause,
+          cause :: error(),
           %% a field where you can place extra context about the error that
           %% doesn't fit in other fields
-          extra}).
+          extra :: extra()}).
+
+-type einfo() :: #einfo{}.
 
 -ifdef(FUNCTION_NAME).
     -define(FUNCTION_NAME_SUPPORTED, true).
