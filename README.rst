@@ -163,6 +163,93 @@ to:
 
 Note that include_lib for einfo.hrl will only be included if it wasn't there
 
+API
+---
+
+
+Parameters
+..........
+
+Type
+	An atom describing the type of error in a computer friendly way
+	What you would put as second element in an error tuple: {error, Type}
+
+Reason
+	A string describint the error in human a friendly way
+
+Extra
+	Extra data that serves as context for the error, for example if the error
+	was caused because of a bad key, you can add the key in the extra field
+
+Cause
+	If this error was caused by another internal error you can put the internal
+	error in this field so you can have traceback-like information
+
+Module
+	The module where the error was generated as an atom
+
+Function
+	The function where the error was generated as an atom
+
+Arity
+	The arity of the function where the error was generated as an int
+
+Line
+	The line where the error was generated as an int
+
+Parse Transforms
+................
+
+All calls set module, function, arity and line
+
+einfo:error(Type)
+	Create an error with type set, reason is a string version of type
+
+einfo:error(Type, Reason)
+	Create an error with type and reason set
+
+einfo:error(Type, Reason, Extra)
+	Create an error with type and reason and extra set
+
+einfo:wrap(Type, Cause)
+	Create an error with type and cause set, reason is a string version of type
+
+einfo:wrap(Type, Reason, Cause)
+	Create an error with type, reason and cause set
+
+einfo:wrap(Type, Reason, Extra, Cause)
+	Create an error with type, reason, extra and cause set
+
+einfo:format(Type, Format, FormatData)
+	Create an error with type set, reason is a the result of calling at runtime
+	io_lib:format(Format, FormatData)
+
+einfo:format(Type, Format, FormatData, Extra)
+	Create an error with type and extra set,
+	reason is a the result of calling at runtime
+	io_lib:format(Format, FormatData)
+
+einfo:wrap_format(Type, Format, FormatData, Cause)
+	Create an error with type and cause set,
+	reason is a the result of calling at runtime
+	io_lib:format(Format, FormatData)
+
+einfo:wrap_format(Type, Format, FormatData, Extra, Cause)
+	Create an error with type, extra and cause set,
+	reason is a the result of calling at runtime
+	io_lib:format(Format, FormatData)
+
+Functions
+.........
+
+einfo:to_string(EInfo | {error, EInfo})
+	Return a one line string representation of the error, without the cause
+	Something like:
+	'Error: {type}@{module}:{function}/{arity}:{line} \"{reason}\" ({extra})'
+
+einfo:print(EInfo | {error, EInfo})
+	print string representation with io:format
+
 TODO
 ----
 
@@ -173,8 +260,7 @@ Ideas:
 
 * maybe include only record definition instead of -include_lib einfo.hrl?
 * remove macros and only use parse transform?
-* einfo:to_string(EInfo)
-* einfo:print(EInfo)
+* add getter for extra parameter, make it work for proplists and maps
 
 Author
 ------
