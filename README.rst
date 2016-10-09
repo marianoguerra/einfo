@@ -245,7 +245,7 @@ Functions
 einfo:to_string(EInfo | {error, EInfo})
 	Return a one line string representation of the error, without the cause
 	Something like:
-	'Error: {type}@{module}:{function}/{arity}:{line} \"{reason}\" ({extra})'
+	'Error: {type}\@{module}:{function}/{arity}:{line} \"{reason}\" ({extra})'
 
 einfo:print(EInfo | {error, EInfo})
 	print string representation with io:format
