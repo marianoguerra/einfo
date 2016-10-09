@@ -306,6 +306,8 @@ to_map(EInfo)
 Macros
 ......
 
+Note: **function** and **arity** fields will only be set on Erlang >= 19
+
 NEW_ERROR(Type)
 	Like einfo:error/1 but as a macro
 NEW_ERROR(Type, Msg)
