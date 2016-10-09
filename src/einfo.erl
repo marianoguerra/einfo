@@ -27,7 +27,7 @@ to_string(EInfo) ->
     io_lib:format(?FORMAT, to_string_args(EInfo)).
 
 print(EInfo) ->
-    io:format(?FORMAT, to_string_args(EInfo)).
+    io:format(?FORMAT "~n", to_string_args(EInfo)).
 
 %%====================================================================
 %% Internal functions

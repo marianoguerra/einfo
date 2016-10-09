@@ -45,5 +45,7 @@ to_string(_) ->
     Expect = "Error: my_error@module1:format/1:39 \"Reason\" (#{extra => true})",
     String1 = lists:flatten(einfo:to_string(Error)),
     String2 = lists:flatten(einfo:to_string(EInfo)),
+    einfo:print(Error),
+    einfo:print(EInfo),
     Expect = String1,
     Expect = String2.
