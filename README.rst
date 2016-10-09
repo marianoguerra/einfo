@@ -18,6 +18,30 @@ Test
 
     rebar3 ct
 
+Use
+---
+
+Add einfo as a dependency on your project, on rebar for example:
+
+.. code-block:: erl
+
+    {einfo, {git, "https://github.com/marianoguerra/einfo", {branch, "master"}}}
+
+Add the einfo_pt parse transform to your config, on rebar for example:
+
+.. code-block:: erl
+
+	{erl_opts, [debug_info, {parse_transform, einfo_pt}]}.
+
+For now, on the module you want to use it, include einfo.hrl:
+
+.. code-block:: erl
+
+	-include_lib("einfo/include/einfo.hrl").
+
+What does it do
+---------------
+
 it will transform the module in test/pt_samples/module1.erl from:
 
 .. code-block:: erl
@@ -254,7 +278,7 @@ TODO
 ----
 
 * fix ?FUNCTION_* macro detection
-* test in a sample project
+* automatic include_lib doesn't seem to be working
 
 Ideas:
 
