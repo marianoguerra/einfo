@@ -322,6 +322,18 @@ WRAP_ERROR(Type, Msg, Cause)
 WRAP_ERROR(Type, Msg, Extra, Cause)
 	Like einfo:wrap/4 but as a macro
 
+Types
+.....
+
+.. code-block:: erl
+
+    -type einfo() :: #einfo{}.
+    -type type() :: atom().
+    -type msg() :: string().
+    -type line() :: non_neg_integer().
+    -type error() :: {error, einfo()} | {error, atom()} | undefined.
+    -type extra() :: any().
+
 TODO
 ----
 
