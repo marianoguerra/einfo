@@ -101,7 +101,7 @@ to:
 		A = {error,
 		 #einfo{type = my_bad, reason = "my_bad",
 			module = module1, function = f1, arity = 0, line = 8,
-			cause = nil, extra = nil}},
+			cause = undefined, extra = undefined}},
 		f2(A).
 
 	f2(1) -> one;
@@ -111,14 +111,14 @@ to:
 		 #einfo{type = badarg,
 			reason = io_lib:format("bad argument: ~p", [X]),
 			module = module1, function = f2, arity = 1, line = 13,
-			cause = nil, extra = nil}}.
+			cause = undefined, extra = undefined}}.
 
 	f3(A, 0) ->
 		{error,
 		 #einfo{type = division_by_zero,
 			reason = "dividing " ++ integer_to_list(A) ++ " by 0",
 			module = module1, function = f3, arity = 2, line = 16,
-			cause = nil, extra = nil}};
+			cause = undefined, extra = undefined}};
 	f3(A, B) -> A / B.
 
 	f_extra(A) ->
@@ -126,26 +126,26 @@ to:
 		 #einfo{type = badarg,
 			reason = io_lib:format("bad argument: ~p", [A]),
 			module = module1, function = f_extra, arity = 1,
-			line = 20, cause = nil,
+			line = 20, cause = undefined,
 			extra = #{arg => A, bad => true}}}.
 
 	wrap() ->
 		{error,
 		 #einfo{type = badarg, reason = "badarg",
 			module = module1, function = wrap, arity = 0, line = 24,
-			cause = {error, parent_cause}, extra = nil}}.
+			cause = {error, parent_cause}, extra = undefined}}.
 
 	wrap(Error) ->
 		{error,
 		 #einfo{type = badarg, reason = "badarg",
 			module = module1, function = wrap, arity = 1, line = 27,
-			cause = Error, extra = nil}}.
+			cause = Error, extra = undefined}}.
 
 	wrap_reason() ->
 		{error,
 		 #einfo{type = badarg, reason = "Reason",
 			module = module1, function = wrap_reason, arity = 0,
-			line = 30, cause = {error, parent_cause}, extra = nil}}.
+			line = 30, cause = {error, parent_cause}, extra = undefined}}.
 
 	wrap_extra() ->
 		{error,
@@ -159,14 +159,14 @@ to:
 		 #einfo{type = badarg,
 			reason = io_lib:format("bad argument: ~p", [X]),
 			module = module1, function = format, arity = 1,
-			line = 36, cause = nil, extra = nil}}.
+			line = 36, cause = undefined, extra = undefined}}.
 
 	format_extra(A) ->
 		{error,
 		 #einfo{type = badarg,
 			reason = io_lib:format("bad argument: ~p", [A]),
 			module = module1, function = format_extra, arity = 1,
-			line = 39, cause = nil,
+			line = 39, cause = undefined,
 			extra = #{arg => A, bad => true}}}.
 
 	wrap_format(X) ->
@@ -174,7 +174,7 @@ to:
 		 #einfo{type = badarg,
 			reason = io_lib:format("bad argument: ~p", [X]),
 			module = module1, function = wrap_format, arity = 1,
-			line = 42, cause = {error, parent}, extra = nil}}.
+			line = 42, cause = {error, parent}, extra = undefined}}.
 
 	wrap_format_extra(A) ->
 		{error,
